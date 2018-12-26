@@ -9,8 +9,8 @@ from aiogram.utils.executor import start_webhook
 API_TOKEN = '782542203:AAHz3rCUYBgHW_WePqy6F47jGxg1g9FtAuQ'
 
 # webhook settings
-WEBHOOK_HOST = 'https://your.domain'
-WEBHOOK_PATH = '/path/to/api'
+WEBHOOK_HOST = 'https://code-run-bot.herokuapp.com'
+WEBHOOK_PATH = '/webhook/' + API_TOKEN
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
 # webserver settings

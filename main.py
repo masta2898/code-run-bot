@@ -24,7 +24,7 @@ bot = Bot(token=API_TOKEN, loop=loop)
 dp = Dispatcher(bot)
 
 
-@dp.message_handler(commands='/echo')
+@dp.message_handler(commands='echo')
 async def echo(message: types.Message):
     await bot.send_message(message.chat.id, message.text)
 

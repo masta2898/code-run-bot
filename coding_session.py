@@ -20,9 +20,12 @@ class CodingSession:
     def __init__(self):
         self.globals = globals().copy()
         self.locals = locals().copy()
+        self._history = []
 
     def code_run(self, code):
         logging.info(f'Code input: {code}')
+
+        self._history.append(code)
 
         try:
             with stdoutIO() as s:
@@ -44,13 +47,19 @@ class CodingSession:
         result = subprocess.run(['pip', 'install', lib_name], stdout=subprocess.PIPE)
         return result.stdout.decode('utf-8')
 
+    def history(self):
+        return '\n'.join(self._history)
+
+
 if __name__ == '__main__':
     sess = CodingSession()
     logging.basicConfig(level=logging.DEBUG)
-    res = sess.add_library('requests')
+    #res = sess.add_library('requests')
 
-    # logging.debug(sess.code_run('a=1\nb=2'))
-    # logging.debug(sess.code_run('b'))
-    # logging.debug(sess.code_run('print("3")'))
-    # logging.debug(sess.code_run('2'))
+    logging.debug(sess.code_run('a=1\nb=2'))
+    logging.debug(sess.code_run('b'))
+    logging.debug(sess.code_run('print("3")'))
+    logging.debug(sess.code_run('2'))
+
+    logging.debug(sess.code_run(sess.history()))
     # logging.debug(sess.code_run('__'))

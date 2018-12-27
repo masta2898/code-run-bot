@@ -41,7 +41,7 @@ class CodingSession:
             return f'Error:\n {traceback.format_exc()}'
 
     def add_library(self, lib_name):
-        result = await subprocess.run(['pip', 'install', lib_name], stdout=subprocess.PIPE)
+        result = subprocess.run(['pip', 'install', lib_name], stdout=subprocess.PIPE)
         return result.stdout.decode('utf-8')
 
 if __name__ == '__main__':

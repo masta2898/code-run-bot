@@ -35,12 +35,6 @@ async def echo(message: types.Message):
     await bot.send_message(message.chat.id, message.text)
 
 
-@dp.message_handler(commands='add')
-async def echo(message: types.Message):
-    result = coding_session.add_library(str(message.text)[5:])
-    await bot.send_message(message.chat.id, result)
-
-
 @dp.message_handler()
 async def handle_code(message: types.Message):
     if str(message.text).startswith(PYTHON_CODE_MARK):

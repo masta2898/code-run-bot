@@ -81,7 +81,7 @@ class CodeRunBot:
                 await self.bot.send_message(chat_id, history)
                 return
 
-        await self.bot.send_message(chat_id, "No history found :(")
+        await self.bot.send_message(chat_id, "History not found :(")
 
     async def __save_history(self, message: types.Message):
         await self.bot.send_message(message.chat.id, "Not implemented yet.")
@@ -89,11 +89,11 @@ class CodeRunBot:
     async def __clear_history(self, message: types.Message):
         chat_id = message.chat.id
         if chat_id not in self.sessions:
-            await self.bot.send_message(chat_id, "No history to clean :(")
+            await self.bot.send_message(chat_id, "No history to clear :(")
             return
 
         del self.sessions[chat_id]
-        await self.bot.send_message(chat_id, "History cleaned up!")
+        await self.bot.send_message(chat_id, "History has been cleared!")
 
     async def __load_history(self, message: types.Message):
         chat_id = message.chat.id
@@ -104,6 +104,7 @@ class CodeRunBot:
 
         if chat_id in self.sessions:
             del self.sessions[chat_id]
+            await self.bot.send_message(chat_id, "Old history has been cleared!")
 
         self.sessions[chat_id] = CodingSession()
         code = reply.text

@@ -49,6 +49,7 @@ class CodeRunBot:
             self.__get_history: ['history'],
             self.__save_history: ['save'],
             self.__clear_history: ['clear'],
+            self.__load_history: ['load'],
         }
 
         for handler, commands in handlers.items():
@@ -93,3 +94,21 @@ class CodeRunBot:
 
         del self.sessions[chat_id]
         await self.bot.send_message(chat_id, "History cleaned up!")
+
+    async def __load_history(self, message: types.Message):
+        chat_id = message.chat.id
+        reply = message.reply_to_message
+        if not reply:
+            await self.bot.send_message(chat_id, "Reply to the history message with /load command to load it.")
+            return
+
+        if chat_id in self.sessions:
+            del self.sessions[chat_id]
+
+        self.sessions[chat_id] = CodingSession()
+        code = reply.text
+        result = self.sessions[chat_id].code_run(code)
+        if result:
+            await self.bot.send_message(chat_id, result)
+
+        await self.bot.send_message(chat_id, "Code has been loaded.")

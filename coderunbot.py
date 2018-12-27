@@ -64,8 +64,8 @@ class CodeRunBot:
 
         code = message.get_args()
         result = self.sessions[chat_id].code_run(code)
-        result = result if result is not None else ""
-        await self.bot.send_message(chat_id, result)
+        if result:
+            await self.bot.send_message(chat_id, result)
 
     async def __install_package(self, message: types.Message):
         package_name = message.get_args()

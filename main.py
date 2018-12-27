@@ -11,7 +11,7 @@ from coding_session import CodingSession
 API_TOKEN = '782542203:AAHz3rCUYBgHW_WePqy6F47jGxg1g9FtAuQ'
 
 # webhook settings
-WEBHOOK_HOST = ' https://code-run-bot.herokuapp.com/'
+WEBHOOK_HOST = 'https://code-run-bot.herokuapp.com/'
 WEBHOOK_PATH = '/webhook/'
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 

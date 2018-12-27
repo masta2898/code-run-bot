@@ -19,7 +19,7 @@ WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = os.getenv('PORT')
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 loop = asyncio.get_event_loop()
 bot = Bot(token=API_TOKEN, loop=loop)

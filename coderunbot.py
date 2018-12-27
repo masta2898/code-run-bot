@@ -23,6 +23,11 @@ class CodeRunBot:
         self.sessions: {int: CodingSession} = dict()
         self.default_session = CodingSession()
 
+        self._history_saver = None
+
+    def set_history_saver(self, history_saver):
+        self._history_saver = history_saver
+
     def run(self):
         logging.basicConfig(level=logging.DEBUG)
         start_webhook(dispatcher=self.dispatcher, webhook_path=self.webhook_path, on_startup=self.__on_startup,
@@ -41,6 +46,9 @@ class CodeRunBot:
             self.__echo: ['echo'],
             self.__handle_code: ['code'],
             self.__install_package: ['add'],
+            self.__get_history: ['history'],
+            self.__save_history: ['save'],
+            self.__clear_history: ['clear'],
         }
 
         for handler, commands in handlers.items():
@@ -62,3 +70,26 @@ class CodeRunBot:
         package_name = message.get_args()
         self.default_session.add_library(package_name)
         await self.bot.send_message(message.chat.id, f"Package {package_name} has been installed.")
+
+    async def __get_history(self, message: types.Message):
+        chat_id = message.chat.id
+        if chat_id in self.sessions:
+            history = self.sessions[chat_id].history()
+            if len(history) > 0:
+                await self.bot.send_message(chat_id, history)
+                return
+
+        await self.bot.send_message(chat_id, "No history found :(")
+
+    async def __save_history(self, message: types.Message):
+        await self.bot.send_message(message.chat.id, "Not implemented yet.")
+
+    async def __clear_history(self, message: types.Message):
+        chat_id = message.chat.id
+        if chat_id not in self.sessions:
+            await self.bot.send_message(chat_id, "No history to clean :(")
+            return
+
+        del self.sessions[chat_id]
+        self.sessions[chat_id] = CodingSession()
+        await self.bot.send_message(chat_id, "History cleaned up!")

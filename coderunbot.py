@@ -50,15 +50,15 @@ class CodeRunBot:
         await self.bot.send_message(message.chat.id, message.text)
 
     async def __handle_code(self, message: types.Message):
-        code = message.get_args()
         chat_id = message.chat.id
         if chat_id not in self.sessions:
             self.sessions[chat_id] = CodingSession()
 
+        code = message.get_args()
         result = self.sessions[chat_id].code_run(code)
         await self.bot.send_message(chat_id, result)
 
     async def __install_package(self, message: types.Message):
-        package_name = message.text
+        package_name = message.get_args()
         self.default_session.add_library(package_name)
         await self.bot.send_message(message.chat.id, f"Package {package_name} has been installed.")

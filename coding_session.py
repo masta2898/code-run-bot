@@ -41,13 +41,13 @@ class CodingSession:
             return f'Error:\n {traceback.format_exc()}'
 
     def add_library(self, lib_name):
-        result = subprocess.run(['pip', 'install', lib_name], stdout=subprocess.PIPE)
+        result = await subprocess.run(['pip', 'install', lib_name], stdout=subprocess.PIPE)
         return result.stdout.decode('utf-8')
 
 if __name__ == '__main__':
     sess = CodingSession()
     logging.basicConfig(level=logging.DEBUG)
-    logging.debug(sess.add_library('requests'))
+    res = sess.add_library('requests')
 
     # logging.debug(sess.code_run('a=1\nb=2'))
     # logging.debug(sess.code_run('b'))

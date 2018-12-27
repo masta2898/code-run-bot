@@ -34,9 +34,10 @@ coding_session: CodingSession = CodingSession()
 async def echo(message: types.Message):
     await bot.send_message(message.chat.id, message.text)
 
+
 @dp.message_handler(commands='add')
 async def echo(message: types.Message):
-    result = coding_session.add_library(str(message.text))
+    result = coding_session.add_library(str(message.text)[5:])
     await bot.send_message(message.chat.id, result)
 
 

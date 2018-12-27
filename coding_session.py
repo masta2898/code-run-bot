@@ -2,6 +2,7 @@ import logging
 import sys
 from io import StringIO
 import contextlib
+import traceback
 
 
 @contextlib.contextmanager
@@ -36,7 +37,7 @@ class CodingSession:
 
         except Exception as ex:
             logging.exception(ex)
-            return f'Error:\n {sys.exc_info()}'
+            return f'Error:\n {traceback.format_exc()}'
 
 
 if __name__ == '__main__':

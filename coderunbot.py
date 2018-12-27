@@ -91,5 +91,4 @@ class CodeRunBot:
             return
 
         del self.sessions[chat_id]
-        self.sessions[chat_id] = CodingSession()
         await self.bot.send_message(chat_id, "History cleaned up!")

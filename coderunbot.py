@@ -23,11 +23,6 @@ class CodeRunBot:
         self.sessions: {int: CodingSession} = dict()
         self.default_session = CodingSession()
 
-        self._history_saver = None
-
-    def set_history_saver(self, history_saver):
-        self._history_saver = history_saver
-
     def run(self):
         logging.basicConfig(level=logging.DEBUG)
         start_webhook(dispatcher=self.dispatcher, webhook_path=self.webhook_path, on_startup=self.__on_startup,

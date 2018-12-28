@@ -25,17 +25,17 @@ class CodingSession:
     def code_run(self, code):
         logging.info(f'Code input: {code}')
 
-        self._history.append(code)
-
         try:
             with stdoutIO() as s:
                 try:
                     result = eval(code, self.globals, self.locals)
                     if result:
+                        self._history.append(code)
                         return result
 
                 except SyntaxError:
                     exec(code, self.globals, self.locals)
+                    self._history.append(code)
 
             return s.getvalue()
 
@@ -62,4 +62,8 @@ if __name__ == '__main__':
     logging.debug(sess.code_run('2'))
 
     logging.debug(sess.code_run(sess.history()))
+
+    sess.clear()
+
+    logging.debug(sess.code_run('b'))
     # logging.debug(sess.code_run('__'))

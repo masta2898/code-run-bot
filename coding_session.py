@@ -35,8 +35,8 @@ class CodingSession:
 
                 except SyntaxError:
                     exec(code, self.globals, self.locals)
-                    self._history.append(code)
 
+            self._history.append(code)
             return s.getvalue()
 
         except Exception as ex:
@@ -56,14 +56,15 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     #res = sess.add_library('requests')
 
-    logging.debug(sess.code_run('a=1\nb=2'))
-    logging.debug(sess.code_run('b'))
+    # logging.debug(sess.code_run('a=1\nb=2'))
+    # logging.debug(sess.code_run('b'))
     logging.debug(sess.code_run('print("3")'))
-    logging.debug(sess.code_run('2'))
-
-    logging.debug(sess.code_run(sess.history()))
-
-    sess.clear()
-
-    logging.debug(sess.code_run('b'))
+    logging.debug(sess.history())
+    # logging.debug(sess.code_run('2'))
+    #
+    # logging.debug(sess.code_run(sess.history()))
+    #
+    # sess.clear()
+    #
+    # logging.debug(sess.code_run('b'))
     # logging.debug(sess.code_run('__'))

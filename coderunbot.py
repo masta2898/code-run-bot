@@ -70,13 +70,30 @@ class CodeRunBot:
 
     async def __get_history(self, message: types.Message):
         chat_id = message.chat.id
-        if chat_id in self.sessions:
-            history = self.sessions[chat_id].history()
-            if len(history) > 0:
-                await self.bot.send_message(chat_id, history)
-                return
+        if chat_id not in self.sessions:
+            await self.bot.send_message(chat_id, "History not found :(")
+            return
 
-        await self.bot.send_message(chat_id, "History not found :(")
+        history = self.sessions[chat_id].history()
+        if not history:
+            await self.bot.send_message(chat_id, "Session has been created, but no history recorded.")
+            return
+
+        entities = message.entities
+        hashtags = str()
+        for entity in entities:
+            if entity.type == "hashtag":
+                hashtags += f"{entity.get_text(message.text)}\n"
+
+        if hashtags:
+            history = f"{hashtags}{history}"
+            del self.sessions[chat_id]
+            self.sessions[chat_id] = CodingSession()
+            result = self.sessions[chat_id].code_run(history)
+            if result:
+                await self.bot.send_message(chat_id, result)
+
+        await self.bot.send_message(chat_id, history)
 
     async def __save_history(self, message: types.Message):
         await self.bot.send_message(message.chat.id, "Not implemented yet.")

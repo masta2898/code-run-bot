@@ -51,7 +51,7 @@ class CodeRunBot:
             self.dispatcher.register_message_handler(handler, commands=commands)
 
     async def __echo(self, message: types.Message):
-        await self.bot.send_message(message.chat.id, message.text)
+        await self.bot.send_message(message.chat.id, message.get_args())
 
     async def __handle_code(self, message: types.Message):
         chat_id = message.chat.id

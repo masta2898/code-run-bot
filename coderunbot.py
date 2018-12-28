@@ -79,21 +79,29 @@ class CodeRunBot:
             await self.bot.send_message(chat_id, "Session has been created, but no history recorded.")
             return
 
-        entities = message.entities
+        hashtags = self.__get_hashtags(message)
+        if hashtags:
+            history = f"{hashtags}{history}"
+            await self.__update_session(chat_id, history)
+
+        await self.bot.send_message(chat_id, history)
+
+    def __get_hashtags(self, message: types.Message):
         hashtags = str()
+        entities = message.entities
         for entity in entities:
             if entity.type == "hashtag":
                 hashtags += f"{entity.get_text(message.text)}\n"
+        return hashtags
 
-        if hashtags:
-            history = f"{hashtags}{history}"
+    async def __update_session(self, chat_id, code):
+        if chat_id in self.sessions:
             del self.sessions[chat_id]
-            self.sessions[chat_id] = CodingSession()
-            result = self.sessions[chat_id].code_run(history)
-            if result:
-                await self.bot.send_message(chat_id, result)
 
-        await self.bot.send_message(chat_id, history)
+        self.sessions[chat_id] = CodingSession()
+        result = self.sessions[chat_id].code_run(code)
+        if result:
+            await self.bot.send_message(chat_id, result)
 
     async def __save_history(self, message: types.Message):
         await self.bot.send_message(message.chat.id, "Not implemented yet.")
@@ -104,7 +112,7 @@ class CodeRunBot:
             await self.bot.send_message(chat_id, "No history to clear :(")
             return
 
-        del self.sessions[chat_id]
+        await self.__update_session(chat_id, "")
         await self.bot.send_message(chat_id, "History has been cleared!")
 
     async def __load_history(self, message: types.Message):
@@ -118,10 +126,5 @@ class CodeRunBot:
             del self.sessions[chat_id]
             await self.bot.send_message(chat_id, "Old history has been cleared!")
 
-        self.sessions[chat_id] = CodingSession()
-        code = reply.text
-        result = self.sessions[chat_id].code_run(code)
-        if result:
-            await self.bot.send_message(chat_id, result)
-
+        await self.__update_session(chat_id, reply.text)
         await self.bot.send_message(chat_id, "Code has been loaded.")

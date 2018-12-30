@@ -39,12 +39,12 @@ class CodeRunBot:
     def __register_commands(self):
         handlers = {
             self.__echo: ['echo'],
-            self.__handle_code: ['code'],
-            self.__install_package: ['add'],
-            self.__get_history: ['history'],
-            self.__save_history: ['save'],
-            self.__clear_history: ['clear'],
-            self.__load_history: ['load'],
+            self.__handle_code: ['code', 'c'],
+            self.__install_package: ['add', 'a'],
+            self.__get_history: ['history', 'h'],
+            self.__save_history: ['save', 's'],
+            self.__clear_history: ['clear', 'c'],
+            self.__load_history: ['load', 'l'],
         }
 
         for handler, commands in handlers.items():

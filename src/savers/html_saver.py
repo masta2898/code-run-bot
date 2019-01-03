@@ -6,7 +6,9 @@ class HtmlSaver(HighlightingSaver):
         super().__init__(filename)
         self.filename = filename
 
-    def save(self, code: str):
-        code = f"<html>\n{self._highlighter.highlight(code)}</html>"
+    def save(self, code: str) -> str:
+        if self._highlighter:
+            code = f"<html>\n{self._highlighter.highlight(code)}</html>"
         with open(self.filename, 'w') as file:
             file.writelines(code)
+        return f"Saved in html as {self.filename}"

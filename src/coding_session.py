@@ -52,8 +52,8 @@ class CodingSession:
     def history(self):
         return '\n'.join(self._history)
 
-    def save(self, saver: Saver):
-        saver.save(self.history())
+    def save(self, saver: Saver) -> str:
+        return saver.save(self.history())
 
 
 if __name__ == '__main__':

@@ -6,7 +6,7 @@ class PlaintextSaver(Saver):
         super().__init__(filename)
         self.filename = filename
 
-    def save(self, code: str):
+    def save(self, code: str) -> str:
         with open(self.filename, 'w') as file:
             file.writelines(code)
-
+        return f"Saved to {self.filename}."

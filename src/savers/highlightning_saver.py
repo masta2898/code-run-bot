@@ -10,11 +10,11 @@ class HighlightingSaver(Saver):
     def __init__(self, filename: str):
         super().__init__(filename)
         self.filename = filename
-        self._highlighter: Highlighter = None
+        self._highlighter: Highlighter = Highlighter()
 
     def set_highlighter(self, highlighter: Highlighter):
         self._highlighter = highlighter
 
     @abstractmethod
-    def save(self, code: str):
+    def save(self, code: str) -> str:
         raise NotImplementedError

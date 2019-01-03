@@ -8,8 +8,11 @@ from aiogram.utils.executor import start_webhook
 
 from src.coding_session import CodingSession
 from src.highlighters.python_highlighter import PythonHighlighter
+from src.savers.highlightning_saver import HighlightingSaver
 from src.savers.html_saver import HtmlSaver
 from src.savers.plaintext_saver import PlaintextSaver
+from src.savers.saver import Saver
+from src.savers.telegraph_saver import TelegraphSaver
 
 
 class CodeRunBot:
@@ -110,24 +113,27 @@ class CodeRunBot:
         if chat_id not in self.sessions:
             return await self.bot.send_message(chat_id, "No code to save :(")
 
-        saving_types = ("text", "html")
-        available_types = f"Available types: {', '.join(saving_types)}"
+        savers: {str: Saver} = {
+            "text": PlaintextSaver,
+            "html": HtmlSaver,
+            "telegraph": TelegraphSaver
+        }
+        available_types = f"Available types: {', '.join(savers)}"
 
         args = message.get_args().split()
         if len(args) != 2:
             return await self.bot.send_message(chat_id, f"Specify type of saving and filename. {available_types}")
 
         saving_type, filename = args
-        if saving_type == "text":
-            saver = PlaintextSaver(filename)
-        elif saving_type == "html":
-            saver = HtmlSaver(filename)
-            saver.set_highlighter(PythonHighlighter())
+        if saving_type in savers:
+            saver = savers[saving_type](filename)
+            if isinstance(saver, HighlightingSaver):
+                saver.set_highlighter(PythonHighlighter())
         else:
             return await self.bot.send_message(chat_id, f"Specify type of saving and filename. {available_types}")
 
-        self.sessions[chat_id].save(saver)
-        await self.bot.send_message(message.chat.id, f"Saved as {filename}.")
+        result = self.sessions[chat_id].save(saver)
+        await self.bot.send_message(message.chat.id, f"Saving result:\n{result}")
 
     async def __clear_history(self, message: types.Message):
         """Clears current session and creates new."""

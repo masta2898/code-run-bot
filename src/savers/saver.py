@@ -8,5 +8,10 @@ class Saver:
         self.filename = filename
 
     @abstractmethod
-    def save(self, code: str):
+    def save(self, code: str) -> str:
+        """
+        Saving method.
+        :param code: code that's need to be saved.
+        :return: saving status or result.
+        """
         raise NotImplementedError

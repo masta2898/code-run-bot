@@ -1,1 +1,4 @@
 .idea
+src/__pycache__
+src/savers/__pycache__
+src/highlighters/__pycache__

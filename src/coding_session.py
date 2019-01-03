@@ -5,6 +5,8 @@ from io import StringIO
 import contextlib
 import traceback
 
+from src.savers.saver import Saver
+
 
 @contextlib.contextmanager
 def stdoutIO(stdout=None):
@@ -49,6 +51,9 @@ class CodingSession:
 
     def history(self):
         return '\n'.join(self._history)
+
+    def save(self, saver: Saver):
+        saver.save(self.history())
 
 
 if __name__ == '__main__':

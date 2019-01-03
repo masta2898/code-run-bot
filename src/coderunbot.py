@@ -7,6 +7,9 @@ from aiogram.dispatcher import Dispatcher
 from aiogram.utils.executor import start_webhook
 
 from src.coding_session import CodingSession
+from src.highlighters.python_highlighter import PythonHighlighter
+from src.savers.html_saver import HtmlSaver
+from src.savers.plaintext_saver import PlaintextSaver
 
 
 class CodeRunBot:
@@ -88,13 +91,11 @@ class CodeRunBot:
         """Prints code history from current session."""
         chat_id = message.chat.id
         if chat_id not in self.sessions:
-            await self.bot.send_message(chat_id, "History not found :(")
-            return
+            return await self.bot.send_message(chat_id, "History not found :(")
 
         history = self.sessions[chat_id].history()
         if not history:
-            await self.bot.send_message(chat_id, "Session has been created, but no history recorded.")
-            return
+            return await self.bot.send_message(chat_id, "Session has been created, but no history recorded.")
 
         hashtags = self.__get_hashtags(message)
         if hashtags:
@@ -105,7 +106,28 @@ class CodeRunBot:
 
     async def __save_history(self, message: types.Message):
         """Saves history via specified method."""
-        await self.bot.send_message(message.chat.id, "Not implemented yet.")
+        chat_id = message.chat.id
+        if chat_id not in self.sessions:
+            return await self.bot.send_message(chat_id, "No code to save :(")
+
+        saving_types = ("text", "html")
+        available_types = f"Available types: {', '.join(saving_types)}"
+
+        args = message.get_args().split()
+        if len(args) != 2:
+            return await self.bot.send_message(chat_id, f"Specify type of saving and filename. {available_types}")
+
+        saving_type, filename = args
+        if saving_type == "text":
+            saver = PlaintextSaver(filename)
+        elif saving_types == "html":
+            saver = HtmlSaver(filename)
+            saver.set_highliter(PythonHighlighter())
+        else:
+            return await self.bot.send_message(chat_id, f"Specify type of saving and filename. {available_types}")
+
+        self.sessions[chat_id].save(saver)
+        await self.bot.send_message(message.chat.id, f"Saved as {filename}.")
 
     async def __clear_history(self, message: types.Message):
         """Clears current session and creates new."""
@@ -122,8 +144,7 @@ class CodeRunBot:
         chat_id = message.chat.id
         reply = message.reply_to_message
         if not reply:
-            await self.bot.send_message(chat_id, "Reply to the history message with /load command to load it.")
-            return
+            return await self.bot.send_message(chat_id, "Reply to the history message with /load command to load it.")
 
         if chat_id in self.sessions:
             del self.sessions[chat_id]

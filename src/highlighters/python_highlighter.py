@@ -6,4 +6,4 @@ class PythonHighlighter(Highlighter):
         pass
 
     def highlight(self, code: str) -> str:
-        pass
+        return f"{code}\n highlighted!"

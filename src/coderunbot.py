@@ -120,9 +120,9 @@ class CodeRunBot:
         saving_type, filename = args
         if saving_type == "text":
             saver = PlaintextSaver(filename)
-        elif saving_types == "html":
+        elif saving_type == "html":
             saver = HtmlSaver(filename)
-            saver.set_highliter(PythonHighlighter())
+            saver.set_highlighter(PythonHighlighter())
         else:
             return await self.bot.send_message(chat_id, f"Specify type of saving and filename. {available_types}")
 

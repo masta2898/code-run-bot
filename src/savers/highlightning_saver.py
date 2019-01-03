@@ -10,13 +10,10 @@ class HighlightingSaver(Saver):
     def __init__(self, filename: str):
         super().__init__(filename)
         self.filename = filename
-        self.highlighter: Highlighter = None
+        self._highlighter: Highlighter = None
 
     def set_highlighter(self, highlighter: Highlighter):
-        self.highlighter = highlighter
-
-    def get_highlighter(self):
-        return self.highlighter
+        self._highlighter = highlighter
 
     @abstractmethod
     def save(self, code: str):
